@@ -1,14 +1,14 @@
 ### Whuzzzup ✨
 
-~ I am working on security   🗯
+~ 🗯
 
-~   focusing on user training   💪
+~  💪
 
-~     learning computer science   🤸🕳️
+~   🤸🕳️
 
-~       knowing nothing   🌊
+~      🌊
 
-~         and hard to reach ;)
+~            ;)
 
 
 <!--
