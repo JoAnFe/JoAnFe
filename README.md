@@ -7,23 +7,23 @@ I use a structured, evidence-led process to translate software weaknesses into a
 ```mermaid
 flowchart TD
     A[Vulnerability / Finding Identified] --> B[Identify CWE]
-    B --> C[Understand Weakness Mechanism]
-    C --> D[Define Exploit Preconditions]
-    D --> E[Identify Exploit Primitive]
-    E --> F[Assess Likely Exploit Outcomes]
-    F --> G[Map to Adversary Behaviour]
-    G --> H[Select MITRE ATT&CK Tactic / Technique]
-    H --> I[Assign Confidence Level]
+    B --> C[Flag Weakness Mechanism - CWE]
+    C --> D[Exploit Preconditions]
+    D --> E[Exploit Primitive]
+    E --> F[Likely Exploit Outcomes]
+    F --> G[Adversary Behaviour]
+    G --> H[MITRE ATT&CK Tactic / Technique]
+    H --> I[Confidence Level]
     I --> J[Record Evidence, Assumptions and Detection Gaps]
-    J --> K[Produce Risk Narrative and Recommendation]
+    J --> K[Risk Narrative and Recommendation]
 ```
 
 ### Process Summary
 
 | Step | Activity | Output |
 |---:|---|---|
-| 1 | Identify the vulnerability or finding | CVE, internal finding ID, affected asset |
-| 2 | Confirm the CWE | Specific weakness classification |
+| 1 | Identify the vulnerability | CVE, internal finding ID, affected asset |
+| 2 | CWE | Weakness classification |
 | 3 | Understand the weakness mechanism | Plain-language description of what is broken |
 | 4 | Define exploit preconditions | Exposure, authentication, privilege, user interaction |
 | 5 | Identify the exploit primitive | RCE, auth bypass, file read, credential exposure, SSRF |
@@ -38,9 +38,9 @@ flowchart TD
 ### Core Model
 
 ```text
-CWE = what is broken
+CWE = Weakness definition
 Exploit primitive = what capability the attacker gains
-Exploit outcome = what the attacker can achieve
+Exploit outcome = the risk / what the attacker can achieve
 MITRE ATT&CK = how that behaviour appears in an intrusion
 ```
 
