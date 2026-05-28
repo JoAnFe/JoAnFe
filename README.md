@@ -61,3 +61,66 @@ Never map CWE directly to ATT&CK without context.
 ```text
 CWE → Exploit Primitive → Exploit Outcome → Adversary Behaviour → ATT&CK Technique
 ```
+
+---
+
+## JoAnFe — the agentic scanner
+
+`joanfe` operationalizes the workflow above. It is an LLM-first agentic static
+code scanner (CLI, Python) that reads a repository, finds weaknesses,
+**validates** them, runs an **adversarial critic loop to cut false positives**,
+and writes a Markdown report with the full CWE → ATT&CK chain and remediation.
+
+It is a **defensive tool for authorized scanning**.
+
+### Install
+
+```bash
+pip install -e ".[dev]"
+export ANTHROPIC_API_KEY=sk-ant-...
+```
+
+### Use
+
+```bash
+# Dry run: heuristic file ranking + cost framing, zero API calls.
+joanfe scan path/to/repo --dry-run
+
+# Full scan -> Markdown report (+ optional machine-readable JSON).
+joanfe scan path/to/repo --output report.md --json findings.json
+
+# Common knobs.
+joanfe scan path/to/repo \
+  --include "src/**" --exclude "**/test_*.py" \
+  --max-files 40 --min-confidence medium \
+  --max-critic-iterations 2 --concurrency 5 \
+  --enable-tools          # optional Semgrep/Bandit/gitleaks corroboration
+```
+
+### How it works
+
+A deterministic, code-orchestrated pipeline (per-stage Claude calls with
+prompt caching and per-stage model selection):
+
+1. **Triage** — token-free heuristic risk scoring, refined by a cheap model.
+2. **Discovery** — recall-biased candidate finding per file/chunk.
+3. **Validation** — re-examines each candidate with context, builds the full
+   CWE → primitive → outcome → adversary → ATT&CK chain, and enforces a hard
+   evidence gate (precondition + reachability + ≥1 verbatim citation).
+4. **Critic** — a bounded adversarial loop that confirms, downgrades, or
+   rejects each finding.
+5. **Dedupe** — clusters overlapping findings.
+6. **Synthesis** — assembles the report; sub-threshold and rejected findings
+   are kept in a transparency appendix.
+
+False positives are cut by the evidence gate, **deterministic citation
+verification** (cited code is re-read from source to catch hallucination), the
+independent critic, optional SAST corroboration, and confidence thresholding.
+
+### Develop
+
+```bash
+ruff check src tests
+mypy src
+pytest                 # mocked, zero-token; add --run-live for one real pass
+```
